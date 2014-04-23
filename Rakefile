@@ -26,21 +26,17 @@ Rake::TestTask.new do |t|
   t.verbose = true
   t.ruby_opts << "-rubygems"
 end
- 
 begin
-  require 'rcov/rcovtask'
-  desc 'Measures test coverage using rcov'
-  Rcov::RcovTask.new do |rcov|
-    rcov.pattern    = 'test/test_*.rb'
-    rcov.output_dir = 'coverage'
-    rcov.verbose    = true
-    rcov.libs << "test"
-    rcov.rcov_opts << '--exclude "gems/*"'
+  require "simplecov"
+
+  desc "Measures test coverage using simplecov"
+  task :simplecov do
+    ENV["COVERAGE"]="true"
+    Rake::Task["test"].execute
   end
 rescue LoadError
-  puts "Rcov not available. Install it with: gem install rcov"
+  puts "simplecov not available. Install it with: gem install simplecov"
 end
-
 begin
   # HACK rvc needs to be installed as a gem
   require 'rvc'
